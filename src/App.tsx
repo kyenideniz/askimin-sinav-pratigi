@@ -43,7 +43,7 @@ const complimentMessages = [
 
 const streakMessages = [
   "Harika bir seri yakaladın aşkım! 🔥",
-  "Bunu kim tutar? Rekora koşuyorsun sevgilim! 🚀",
+  "Seni kim tutar? Rekora koşuyorsun sevgilim! 🚀",
   "Zeka küpüm benim, üst üste doğru cevaplar! 🧠💖",
   "Nazar değmesin aşkıma, harika gidiyorsun! 🧿❤️",
   "Seriye bağladın güzelim, durmak yok! 🌟",
