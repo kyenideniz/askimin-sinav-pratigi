@@ -50,7 +50,7 @@ const complimentMessages = [
   "Benim sevgilim yine bildiği gibi döktürüyor! 🌟🥰",
   "Soruları teker teker harcıyorsun aşkım, helal olsun! 💪❤️",
   "Durdurulamayan bir zeka, tebrikler hayatım! 💡✨",
-  "İşte benim geleceğin başarılı sevgilisi! 🎓❤️",
+  "İşte benim geleceği başarılı sevgilim! 🎓❤️",
   "Her doğru cevabınla içim eriyor aşkım, çok zekisin! 😍",
   "Harika gidiyorsun bitanem, başarılar seninle! 🌈",
   "Gurur kaynağım benim, 5 doğru daha eklendi! 🥇💖",
