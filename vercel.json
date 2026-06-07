@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/(regular|supportive|extra-supportive|super-streak).webp",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
