@@ -152,7 +152,7 @@ export default function App() {
     if ((window as any).avatarTimeout) clearTimeout((window as any).avatarTimeout);
     (window as any).avatarTimeout = setTimeout(() => {
       setAvatarData({ image: null, message: '' });
-    }, 5000);
+    }, 7500);
   };
   const toggleFlag = (questionId: number) => {
     setFlaggedIds(prev => 
