@@ -31,6 +31,24 @@ const complimentMessages = [
   "Maşallah sevgilime, zehir gibisin! 🧠❤️"
 ];
 
+const streakMessages = [
+  "Harika bir seri yakaladın aşkım! 🔥",
+  "Bunu kim tutar? Rekora koşuyorsun sevgilim! 🚀",
+  "Zeka küpüm benim, üst üste doğru cevaplar! 🧠💖",
+  "Nazar değmesin aşkıma, harika gidiyorsun! 🧿❤️",
+  "Seriye bağladın güzelim, durmak yok! 🌟",
+  "Benim bir tanecik aşkım yine döktürüyor! 😍",
+  "Her soruyu tek tek eritiyorsun sevgilim! 🍫🔥",
+  "Bu seriyi bozmak imkansız, gurur duyuyorum! 🥰",
+  "Muhteşem bir odaklanma aşkım, başarıyorsun! 📈",
+  "Aman Allah'ım, fırtına gibi esiyorsun sevgilim! 🌪️❤️",
+  "Zekana bir kez daha hayran kaldım bitanem! 😘🌟",
+  "Bu gidişle sınavı darmadağın edeceksin aşkım! 💥",
+  "Serin alev aldı resmen sevgilim, devam! 🔥👑",
+  "Sorular senin önünde eğiliyor resmen aşkım! 🙇‍♀️❤️",
+  "Her doğru cevapta sana olan hayranlığım artıyor! 💕"
+];
+
 export default function App() {
   const [selectedTopic, setSelectedTopic] = useState("Tümü");
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -124,7 +142,7 @@ export default function App() {
       if (newTotal > 0 && newTotal % 5 === 0) {
         showAvatar('extra-supportive', complimentMessages[Math.floor(Math.random() * complimentMessages.length)]);
       } else if (newStreak >= 3) {
-        showAvatar('extra-supportive', "Harika bir seri yakaladın aşkım! 🔥");
+        showAvatar('extra-supportive', streakMessages[Math.floor(Math.random() * streakMessages.length)]);
       } else {
         showAvatar('regular', "Doğru cevap aşkım! ❤️");
       }
