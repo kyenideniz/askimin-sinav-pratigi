@@ -169,6 +169,9 @@ export default function App() {
   const [answers, setAnswers] = useState<Record<number, number>>(() => getCookie<Record<number, number>>('askim_answers', {}));
   const [checked, setChecked] = useState<Record<number, boolean>>(() => getCookie<Record<number, boolean>>('askim_checked', {}));
   
+  const [reviewAnswers, setReviewAnswers] = useState<Record<number, number>>(() => getCookie<Record<number, number>>('askim_reviewAnswers', {}));
+  const [reviewChecked, setReviewChecked] = useState<Record<number, boolean>>(() => getCookie<Record<number, boolean>>('askim_reviewChecked', {}));
+
   const [flaggedIds, setFlaggedIds] = useState<number[]>(() => getCookie<number[]>('askim_flaggedIds', []));
   const [wrongIds, setWrongIds] = useState<number[]>(() => getCookie<number[]>('askim_wrongIds', []));
   
@@ -179,6 +182,10 @@ export default function App() {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [activeMessage, setActiveMessage] = useState('');
 
+  const isReviewMode = selectedTopic === REVIEW_TOPIC;
+  const currentAnswers = isReviewMode ? reviewAnswers : answers;
+  const currentChecked = isReviewMode ? reviewChecked : checked;
+
   useEffect(() => {
     setCookie('askim_answers', answers);
   }, [answers]);
@@ -186,6 +193,14 @@ export default function App() {
   useEffect(() => {
     setCookie('askim_checked', checked);
   }, [checked]);
+
+  useEffect(() => {
+    setCookie('askim_reviewAnswers', reviewAnswers);
+  }, [reviewAnswers]);
+
+  useEffect(() => {
+    setCookie('askim_reviewChecked', reviewChecked);
+  }, [reviewChecked]);
 
   useEffect(() => {
     setCookie('askim_flaggedIds', flaggedIds);
@@ -221,8 +236,13 @@ export default function App() {
   }, [selectedTopic, flaggedIds, wrongIds]);
 
   const handleSelectOption = (questionId: number, optionIndex: number) => {
-    if (checked[questionId]) return;
-    setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
+    if (isReviewMode) {
+      if (reviewChecked[questionId]) return;
+      setReviewAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
+    } else {
+      if (checked[questionId]) return;
+      setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
+    }
   };
 
   const triggerFloatingEmojis = () => {
@@ -267,40 +287,25 @@ export default function App() {
   };
 
   const handleResetReviewQuestions = () => {
-    const reviewIds = rawQuestions
-      .filter(q => flaggedIds.includes(q.id) || wrongIds.includes(q.id))
-      .map(q => q.id);
-
-    if (reviewIds.length === 0) {
-      alert("Tekrar edilecek soru bulunmamaktadır aşkım! 💕");
-      return;
-    }
-
     if (window.confirm("Tekrar listesindeki tüm soruların cevaplarını sıfırlamak ve yeniden çözmek istediğine emin misin aşkım?")) {
-      setAnswers(prev => {
-        const copy = { ...prev };
-        reviewIds.forEach(id => {
-          delete copy[id];
-        });
-        return copy;
-      });
-      setChecked(prev => {
-        const copy = { ...prev };
-        reviewIds.forEach(id => {
-          delete copy[id];
-        });
-        return copy;
-      });
+      setReviewAnswers({});
+      setReviewChecked({});
     }
   };
 
   const handleCheck = (questionId: number) => {
-    if (answers[questionId] === undefined) return;
-    setChecked(prev => ({ ...prev, [questionId]: true }));
+    const activeAnswers = isReviewMode ? reviewAnswers : answers;
+    if (activeAnswers[questionId] === undefined) return;
+
+    if (isReviewMode) {
+      setReviewChecked(prev => ({ ...prev, [questionId]: true }));
+    } else {
+      setChecked(prev => ({ ...prev, [questionId]: true }));
+    }
 
     const q = rawQuestions.find(r => r.id === questionId);
     if (!q) return;
-    const isCorrect = answers[questionId] === q.answer;
+    const isCorrect = activeAnswers[questionId] === q.answer;
 
     if (isCorrect) {
       const newTotal = totalCorrect + 1;
@@ -308,10 +313,6 @@ export default function App() {
       setTotalCorrect(newTotal);
       setStreak(newStreak);
       triggerFloatingEmojis();
-
-      if (wrongIds.includes(questionId)) {
-        setWrongIds(prev => prev.filter(id => id !== questionId));
-      }
 
       if (newTotal > 0 && newTotal % 5 === 0) {
         showAvatar('extra-supportive', complimentMessages[Math.floor(Math.random() * complimentMessages.length)]);
@@ -336,6 +337,10 @@ export default function App() {
     if (window.confirm("Tüm ilerlemeni, skorunu ve serini sıfırlamak istediğine emin misin aşkım?")) {
       setAnswers({});
       setChecked({});
+      setReviewAnswers({});
+      setReviewChecked({});
+      setWrongIds([]);
+      setFlaggedIds([]);
       setStreak(0);
       setTotalCorrect(0);
       setFloatingEmojis([]);
@@ -351,9 +356,9 @@ export default function App() {
   };
 
   const getOptionStyles = (q: any, optionIndex: number) => {
-    const isSelected = answers[q.id] === optionIndex;
+    const isSelected = currentAnswers[q.id] === optionIndex;
     const isCorrect = q.answer === optionIndex;
-    const isChecked = checked[q.id];
+    const isChecked = currentChecked[q.id];
 
     if (!isChecked) {
       return isSelected
@@ -376,11 +381,11 @@ export default function App() {
     return "border-slate-200 bg-white text-slate-500 opacity-60";
   };
 
-  const validCheckedQuestions = Object.keys(checked).filter(id => rawQuestions.find(q => q.id === parseInt(id))?.answer !== -1);
+  const validCheckedQuestions = Object.keys(currentChecked).filter(id => rawQuestions.find(q => q.id === parseInt(id))?.answer !== -1);
   const checkedCount = validCheckedQuestions.length;
   const currentScore = validCheckedQuestions.reduce((score, qId) => {
     const q = rawQuestions.find(rq => rq.id === parseInt(qId));
-    return answers[parseInt(qId)] === q?.answer ? score + 1 : score;
+    return currentAnswers[parseInt(qId)] === q?.answer ? score + 1 : score;
   }, 0);
   const scorePercentage = checkedCount > 0 ? Math.round((currentScore / checkedCount) * 100) : 0;
 
@@ -452,10 +457,10 @@ export default function App() {
               <section key={q.id} className="flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
                 
                 {/* Status Bars */}
-                {checked[q.id] && q.answer === answers[q.id] && q.answer !== -1 && (
+                {currentChecked[q.id] && q.answer === currentAnswers[q.id] && q.answer !== -1 && (
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-green-500 z-10"></div>
                 )}
-                {checked[q.id] && q.answer !== answers[q.id] && q.answer !== -1 && (
+                {currentChecked[q.id] && q.answer !== currentAnswers[q.id] && q.answer !== -1 && (
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-red-500 z-10"></div>
                 )}
 
@@ -473,8 +478,8 @@ export default function App() {
                   
                   <div className="space-y-3 pl-0">
                     {q.options.map((opt, optIdx) => {
-                      const isSelected = answers[q.id] === optIdx;
-                      const isChecked = checked[q.id];
+                      const isSelected = currentAnswers[q.id] === optIdx;
+                      const isChecked = currentChecked[q.id];
                       const isCorrect = q.answer === optIdx;
                       
                       let indicatorStyles = "bg-slate-100 text-slate-500 group-hover:bg-blue-100 group-hover:text-blue-600";
@@ -486,8 +491,8 @@ export default function App() {
                         <button
                           key={optIdx}
                           onClick={() => handleSelectOption(q.id, optIdx)}
-                          disabled={checked[q.id]}
-                          className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${checked[q.id] ? 'cursor-default' : 'cursor-pointer'} ${getOptionStyles(q, optIdx)}`}
+                          disabled={currentChecked[q.id]}
+                          className={`w-full text-left p-4 rounded-xl border transition-all flex items-center justify-between group ${currentChecked[q.id] ? 'cursor-default' : 'cursor-pointer'} ${getOptionStyles(q, optIdx)}`}
                         >
                           <div className="flex items-center pr-4">
                             <span className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full font-bold mr-4 transition-colors ${indicatorStyles}`}>
@@ -496,10 +501,10 @@ export default function App() {
                             <span className={`${(isChecked && isCorrect) || (isSelected && !isChecked) ? 'text-slate-800 font-medium' : 'text-slate-700'}`}>{opt}</span>
                           </div>
                           
-                          {checked[q.id] && q.answer === optIdx && q.answer !== -1 && (
+                          {currentChecked[q.id] && q.answer === optIdx && q.answer !== -1 && (
                             <CheckCircle2 className="text-green-600 flex-shrink-0" size={24} />
                           )}
-                          {checked[q.id] && answers[q.id] === optIdx && q.answer !== optIdx && q.answer !== -1 && (
+                          {currentChecked[q.id] && currentAnswers[q.id] === optIdx && q.answer !== optIdx && q.answer !== -1 && (
                             <XCircle className="text-red-500 flex-shrink-0" size={24} />
                           )}
                         </button>
@@ -507,11 +512,11 @@ export default function App() {
                     })}
                   </div>
 
-                  {checked[q.id] && (
+                  {currentChecked[q.id] && (
                     <div className="mt-5 pt-2">
                        <div className={`p-4 rounded-xl flex items-start gap-3 border ${
                           q.answer === -1 ? 'bg-amber-50 text-amber-800 border-amber-200' 
-                          : q.answer === answers[q.id] ? 'bg-green-50 text-green-800 border-green-200' 
+                          : q.answer === currentAnswers[q.id] ? 'bg-green-50 text-green-800 border-green-200' 
                           : 'bg-red-50 text-red-800 border-red-200'
                         }`}>
                           {q.answer === -1 ? (
@@ -519,7 +524,7 @@ export default function App() {
                               <AlertCircle className="flex-shrink-0 mt-0.5 text-amber-600" size={20} /> 
                               <span className="text-sm font-medium">Bu soru orijinal dosyada eksikti ve skora dahil edilmedi.</span>
                             </>
-                          ) : q.answer === answers[q.id] ? (
+                          ) : q.answer === currentAnswers[q.id] ? (
                             <>
                               <CheckCircle2 className="flex-shrink-0 mt-0.5 text-green-600" size={20} /> 
                               <span className="text-sm font-bold">Harikasın! Doğru bildin. 🎉</span>
@@ -555,12 +560,12 @@ export default function App() {
                   >
                      <Flag size={20} className={isFlagged ? "fill-current" : ""} />
                   </button>
-                  {!checked[q.id] && (
+                  {!currentChecked[q.id] && (
                     <button
-                      disabled={answers[q.id] === undefined}
+                      disabled={currentAnswers[q.id] === undefined}
                       onClick={() => handleCheck(q.id)}
                       className={`px-8 py-2 font-semibold rounded-lg shadow-sm transition-colors ${
-                        answers[q.id] !== undefined
+                        currentAnswers[q.id] !== undefined
                           ? 'bg-blue-600 text-white hover:bg-blue-700'
                           : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                       }`}
