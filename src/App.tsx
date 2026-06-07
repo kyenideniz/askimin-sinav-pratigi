@@ -266,17 +266,32 @@ export default function App() {
     setFlaggedIds(prev => prev.filter(id => id !== questionId));
   };
 
-  const handleResetQuestion = (questionId: number) => {
-    setAnswers(prev => {
-      const copy = { ...prev };
-      delete copy[questionId];
-      return copy;
-    });
-    setChecked(prev => {
-      const copy = { ...prev };
-      delete copy[questionId];
-      return copy;
-    });
+  const handleResetReviewQuestions = () => {
+    const reviewIds = rawQuestions
+      .filter(q => flaggedIds.includes(q.id) || wrongIds.includes(q.id))
+      .map(q => q.id);
+
+    if (reviewIds.length === 0) {
+      alert("Tekrar edilecek soru bulunmamaktadır aşkım! 💕");
+      return;
+    }
+
+    if (window.confirm("Tekrar listesindeki tüm soruların cevaplarını sıfırlamak ve yeniden çözmek istediğine emin misin aşkım?")) {
+      setAnswers(prev => {
+        const copy = { ...prev };
+        reviewIds.forEach(id => {
+          delete copy[id];
+        });
+        return copy;
+      });
+      setChecked(prev => {
+        const copy = { ...prev };
+        reviewIds.forEach(id => {
+          delete copy[id];
+        });
+        return copy;
+      });
+    }
   };
 
   const handleCheck = (questionId: number) => {
@@ -407,6 +422,15 @@ export default function App() {
                 Listeyi Temizle
               </button>
             )}
+            {selectedTopic === REVIEW_TOPIC && (flaggedIds.length > 0 || wrongIds.length > 0) && (
+              <button 
+                onClick={handleResetReviewQuestions}
+                className="px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-blue-100 flex items-center gap-1.5"
+              >
+                <RefreshCcw size={16} />
+                Yeniden Çöz
+              </button>
+            )}
             <button 
               onClick={handleReset}
               className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium rounded-lg transition-colors"
@@ -531,7 +555,7 @@ export default function App() {
                   >
                      <Flag size={20} className={isFlagged ? "fill-current" : ""} />
                   </button>
-                  {!checked[q.id] ? (
+                  {!checked[q.id] && (
                     <button
                       disabled={answers[q.id] === undefined}
                       onClick={() => handleCheck(q.id)}
@@ -542,15 +566,6 @@ export default function App() {
                       }`}
                     >
                       Cevabı Kontrol Et
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleResetQuestion(q.id)}
-                      className="px-6 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-semibold rounded-lg border border-blue-100 transition-colors flex items-center gap-1.5 shadow-sm"
-                      title="Bu sorunun cevabını sıfırla ve yeniden çöz"
-                    >
-                      <RefreshCcw size={16} />
-                      Yeniden Çöz
                     </button>
                   )}
                 </div>
@@ -614,14 +629,14 @@ export default function App() {
       ))}
 
       {/* AVATAR LAYER */}
-      {activeImage && (
-        <div className={`avatar-container ${isAvatarVisible ? 'avatar-show' : ''}`}>
-          {activeMessage && (
-            <div className="bg-white border-2 border-pink-200 rounded-3xl rounded-br-none p-4 shadow-xl mb-[-10px] z-10 text-pink-700 font-bold text-sm md:text-base relative mr-8 animate-bounce">
-              {activeMessage}
-              <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-200 transform rotate-45"></div>
-            </div>
-          )}
+      <div className={`avatar-container ${isAvatarVisible && activeImage ? 'avatar-show' : ''}`}>
+        {activeMessage && (
+          <div className="bg-white border-2 border-pink-200 rounded-3xl rounded-br-none p-4 shadow-xl mb-[-10px] z-10 text-pink-700 font-bold text-sm md:text-base relative mr-8 animate-bounce">
+            {activeMessage}
+            <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-200 transform rotate-45"></div>
+          </div>
+        )}
+        {activeImage && (
           <img
             src={`/${activeImage}.webp`}
             alt="Avatar"
@@ -632,8 +647,8 @@ export default function App() {
               e.currentTarget.style.display = 'none';
             }}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
