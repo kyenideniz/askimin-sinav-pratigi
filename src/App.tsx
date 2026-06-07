@@ -175,7 +175,9 @@ export default function App() {
   const [streak, setStreak] = useState(() => getCookie<number>('askim_streak', 0));
   const [totalCorrect, setTotalCorrect] = useState(() => getCookie<number>('askim_totalCorrect', 0));
   const [floatingEmojis, setFloatingEmojis] = useState<{id: number, emoji: string, left: string, animationDuration: string, fontSize: string}[]>([]);
-  const [avatarData, setAvatarData] = useState<{image: string | null, message: string}>({ image: null, message: '' });
+  const [isAvatarVisible, setIsAvatarVisible] = useState(false);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeMessage, setActiveMessage] = useState('');
 
   useEffect(() => {
     setCookie('askim_answers', answers);
@@ -238,10 +240,18 @@ export default function App() {
   };
 
   const showAvatar = (img: string, msg: string) => {
-    setAvatarData({ image: img, message: msg });
+    setActiveImage(img);
+    setActiveMessage(msg);
+    setIsAvatarVisible(true);
+    
     if ((window as any).avatarTimeout) clearTimeout((window as any).avatarTimeout);
     (window as any).avatarTimeout = setTimeout(() => {
-      setAvatarData({ image: null, message: '' });
+      setIsAvatarVisible(false);
+      // Wait for slide-down transition (500ms) before clearing image/message so it doesn't blink out
+      setTimeout(() => {
+        setActiveImage(null);
+        setActiveMessage('');
+      }, 500);
     }, 7500);
   };
 
@@ -254,6 +264,19 @@ export default function App() {
   const handleRemoveFromReview = (questionId: number) => {
     setWrongIds(prev => prev.filter(id => id !== questionId));
     setFlaggedIds(prev => prev.filter(id => id !== questionId));
+  };
+
+  const handleResetQuestion = (questionId: number) => {
+    setAnswers(prev => {
+      const copy = { ...prev };
+      delete copy[questionId];
+      return copy;
+    });
+    setChecked(prev => {
+      const copy = { ...prev };
+      delete copy[questionId];
+      return copy;
+    });
   };
 
   const handleCheck = (questionId: number) => {
@@ -508,7 +531,7 @@ export default function App() {
                   >
                      <Flag size={20} className={isFlagged ? "fill-current" : ""} />
                   </button>
-                  {!checked[q.id] && (
+                  {!checked[q.id] ? (
                     <button
                       disabled={answers[q.id] === undefined}
                       onClick={() => handleCheck(q.id)}
@@ -519,6 +542,15 @@ export default function App() {
                       }`}
                     >
                       Cevabı Kontrol Et
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleResetQuestion(q.id)}
+                      className="px-6 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-semibold rounded-lg border border-blue-100 transition-colors flex items-center gap-1.5 shadow-sm"
+                      title="Bu sorunun cevabını sıfırla ve yeniden çöz"
+                    >
+                      <RefreshCcw size={16} />
+                      Yeniden Çöz
                     </button>
                   )}
                 </div>
@@ -550,12 +582,28 @@ export default function App() {
           pointer-events: none;
           filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
-        @keyframes popIn {
-          0% { transform: scale(0.8) translateY(20px); opacity: 0; }
-          100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
         .avatar-container {
-          animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+          position: fixed;
+          bottom: 0;
+          right: 16px;
+          z-index: 100;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          pointer-events: none;
+          max-w: 280px;
+          transform: translateY(110%) scale(0.95);
+          opacity: 0;
+          transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease;
+        }
+        @media (min-width: 768px) {
+          .avatar-container {
+            right: 40px;
+          }
+        }
+        .avatar-container.avatar-show {
+          transform: translateY(0) scale(1);
+          opacity: 1;
         }
       `}} />
 
@@ -566,16 +614,16 @@ export default function App() {
       ))}
 
       {/* AVATAR LAYER */}
-      {avatarData.image && (
-        <div className="fixed bottom-0 right-4 md:right-10 z-[100] flex flex-col items-end pointer-events-none avatar-container max-w-[280px]">
-          {avatarData.message && (
+      {activeImage && (
+        <div className={`avatar-container ${isAvatarVisible ? 'avatar-show' : ''}`}>
+          {activeMessage && (
             <div className="bg-white border-2 border-pink-200 rounded-3xl rounded-br-none p-4 shadow-xl mb-[-10px] z-10 text-pink-700 font-bold text-sm md:text-base relative mr-8 animate-bounce">
-              {avatarData.message}
+              {activeMessage}
               <div className="absolute -bottom-2 right-4 w-4 h-4 bg-white border-b-2 border-r-2 border-pink-200 transform rotate-45"></div>
             </div>
           )}
           <img
-            src={`/${avatarData.image}.webp`}
+            src={`/${activeImage}.webp`}
             alt="Avatar"
             className="w-40 md:w-56 h-auto drop-shadow-2xl"
             style={{ mixBlendMode: 'multiply' }}
