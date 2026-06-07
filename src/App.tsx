@@ -28,7 +28,17 @@ const complimentMessages = [
   "Süper gidiyorsun aşkım, gurur duyuyorum! 💖",
   "Benim zeki sevgilim, harikasın! 🌟",
   "İşte benim aşkım, durdurulamıyorsun! 🚀",
-  "Maşallah sevgilime, zehir gibisin! 🧠❤️"
+  "Maşallah sevgilime, zehir gibisin! 🧠❤️",
+  "5 doğru daha! Sen bir harikasın bitanem! 🌸",
+  "Adım adım zafere gidiyoruz sevgilim, harika! 🏆",
+  "Bu başarıyı akşam kutlamalıyız aşkım! 🥂💕",
+  "Benim sevgilim yine bildiği gibi döktürüyor! 🌟🥰",
+  "Soruları teker teker harcıyorsun aşkım, helal olsun! 💪❤️",
+  "Durdurulamayan bir zeka, tebrikler hayatım! 💡✨",
+  "İşte benim geleceğin başarılı sevgilisi! 🎓❤️",
+  "Her doğru cevabınla içim eriyor aşkım, çok zekisin! 😍",
+  "Harika gidiyorsun bitanem, başarılar seninle! 🌈",
+  "Gurur kaynağım benim, 5 doğru daha eklendi! 🥇💖"
 ];
 
 const streakMessages = [
@@ -49,36 +59,67 @@ const streakMessages = [
   "Her doğru cevapta sana olan hayranlığım artıyor! 💕"
 ];
 
+function setCookie(name: string, value: any, days = 365) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+  const jsonVal = JSON.stringify(value);
+  document.cookie = `${name}=${encodeURIComponent(jsonVal)};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie<T>(name: string, defaultValue: T): T {
+  try {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) === 0) {
+        const val = decodeURIComponent(c.substring(nameEQ.length, c.length));
+        return JSON.parse(val) as T;
+      }
+    }
+  } catch (e) {
+    // Return default if error parsing
+  }
+  return defaultValue;
+}
+
 export default function App() {
   const [selectedTopic, setSelectedTopic] = useState("Tümü");
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [checked, setChecked] = useState<Record<number, boolean>>({});
+  const [answers, setAnswers] = useState<Record<number, number>>(() => getCookie<Record<number, number>>('askim_answers', {}));
+  const [checked, setChecked] = useState<Record<number, boolean>>(() => getCookie<Record<number, boolean>>('askim_checked', {}));
   
-  const [flaggedIds, setFlaggedIds] = useState<number[]>(() => {
-    try {
-      const saved = localStorage.getItem('askim_flaggedIds');
-      return saved ? JSON.parse(saved) : [];
-    } catch { return []; }
-  });
-  const [wrongIds, setWrongIds] = useState<number[]>(() => {
-    try {
-      const saved = localStorage.getItem('askim_wrongIds');
-      return saved ? JSON.parse(saved) : [];
-    } catch { return []; }
-  });
+  const [flaggedIds, setFlaggedIds] = useState<number[]>(() => getCookie<number[]>('askim_flaggedIds', []));
+  const [wrongIds, setWrongIds] = useState<number[]>(() => getCookie<number[]>('askim_wrongIds', []));
   
-  const [streak, setStreak] = useState(0);
-  const [totalCorrect, setTotalCorrect] = useState(0);
+  const [streak, setStreak] = useState(() => getCookie<number>('askim_streak', 0));
+  const [totalCorrect, setTotalCorrect] = useState(() => getCookie<number>('askim_totalCorrect', 0));
   const [hearts, setHearts] = useState<{id: number, left: string, animationDuration: string, fontSize: string}[]>([]);
   const [avatarData, setAvatarData] = useState<{image: string | null, message: string}>({ image: null, message: '' });
 
   useEffect(() => {
-    localStorage.setItem('askim_flaggedIds', JSON.stringify(flaggedIds));
+    setCookie('askim_answers', answers);
+  }, [answers]);
+
+  useEffect(() => {
+    setCookie('askim_checked', checked);
+  }, [checked]);
+
+  useEffect(() => {
+    setCookie('askim_flaggedIds', flaggedIds);
   }, [flaggedIds]);
 
   useEffect(() => {
-    localStorage.setItem('askim_wrongIds', JSON.stringify(wrongIds));
+    setCookie('askim_wrongIds', wrongIds);
   }, [wrongIds]);
+
+  useEffect(() => {
+    setCookie('askim_streak', streak);
+  }, [streak]);
+
+  useEffect(() => {
+    setCookie('askim_totalCorrect', totalCorrect);
+  }, [totalCorrect]);
 
   const filteredQuestions = useMemo(() => {
     if (selectedTopic === "Tümü") return rawQuestions;
@@ -113,11 +154,15 @@ export default function App() {
       setAvatarData({ image: null, message: '' });
     }, 5000);
   };
-
   const toggleFlag = (questionId: number) => {
     setFlaggedIds(prev => 
       prev.includes(questionId) ? prev.filter(id => id !== questionId) : [...prev, questionId]
     );
+  };
+
+  const handleRemoveFromReview = (questionId: number) => {
+    setWrongIds(prev => prev.filter(id => id !== questionId));
+    setFlaggedIds(prev => prev.filter(id => id !== questionId));
   };
 
   const handleCheck = (questionId: number) => {
@@ -157,11 +202,14 @@ export default function App() {
   };
 
   const handleReset = () => {
-    setAnswers({});
-    setChecked({});
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.confirm("Tüm ilerlemeni, skorunu ve serini sıfırlamak istediğine emin misin aşkım?")) {
+      setAnswers({});
+      setChecked({});
+      setStreak(0);
+      setTotalCorrect(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
-
   const handleClearReviewList = () => {
     if (window.confirm("Tekrar edilecekler listesindeki tüm soruları temizlemek istediğine emin misin aşkım?")) {
       setFlaggedIds([]);
@@ -257,6 +305,7 @@ export default function App() {
         <div className="flex-1 space-y-6">
           {filteredQuestions.map((q) => {
             const isFlagged = flaggedIds.includes(q.id);
+            const isInReview = flaggedIds.includes(q.id) || wrongIds.includes(q.id);
             return (
               <section key={q.id} className="flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
                 
@@ -347,6 +396,16 @@ export default function App() {
                 </div>
 
                 <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-end items-center gap-2">
+                  {isInReview && (
+                    <button
+                      onClick={() => handleRemoveFromReview(q.id)}
+                      className="mr-auto px-3 py-1.5 bg-green-50 hover:bg-green-100 text-green-700 text-xs font-semibold rounded-lg border border-green-100 transition-colors flex items-center gap-1"
+                      title="Bu soruyu tekrar listesinden kaldır"
+                    >
+                      <CheckCircle2 size={14} />
+                      Bunu Biliyorum
+                    </button>
+                  )}
                   <button 
                     onClick={() => toggleFlag(q.id)}
                     className={`p-2 rounded-lg transition-colors ${isFlagged ? 'bg-amber-100 text-amber-600' : 'text-amber-500 hover:bg-amber-50'}`}
