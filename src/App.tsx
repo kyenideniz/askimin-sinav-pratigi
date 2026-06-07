@@ -20,7 +20,22 @@ const wrongMessages = [
   "Benim aşkım bunun üstesinden gelir.",
   "Sadece küçük bir dalgınlık, hadi devam!",
   "Gülümse ve bir sonrakine geç canım.",
-  "Sen her şeyin en iyisini yaparsın, buna da çalışırız."
+  "Sen her şeyin en iyisini yaparsın, buna da çalışırız.",
+  "Hallederiz sevgilim, moralini hiç bozma! 💕",
+  "Benim akıllı sevgilim her hatadan daha güçlü döner! 🧠✨",
+  "Bu küçük engel senin zekanı gölgeleyemez aşkım! 😘",
+  "Hiç önemli değil bitanem, bir sonrakine bomba gibi odaklan!",
+  "Birlikte üzerinden geçip öğreniriz sevgilim, canın sağ olsun! 📚🌸",
+  "Senin canın sağ olsun aşkım, sorular sana feda olsun! 🥰",
+  "Başarıya giden yolda böyle ufak tökezlemeler olur aşkım! 🧗‍♀️❤️",
+  "Zor bir soruydu sevgilim, hata yapman çok normal, pes etme!",
+  "Kendine haksızlık etme sevgilim, sen benim şampiyonumsun! 🏆",
+  "Bunu bir tecrübe sayalım aşkım, hemen bir sonrakine geçelim!",
+  "Sen benim en zeki sevgilimsin, bunu da öğreneceksin biliyorum! 😘❤️",
+  "Üzülmek yok aşkım, bu soru sadece sana neyi tekrar etmen gerektiğini gösterdi!",
+  "Derin bir nefes al sevgilim, her şey yolunda, devam et! 🌬️💖",
+  "Sorular geçici, senin zekan kalıcı benim güzel sevgilim! 💫",
+  "Ben her an arkandayım sevgilim, öğrenene kadar devam! 🌹❤️"
 ];
 
 const complimentMessages = [
@@ -38,7 +53,22 @@ const complimentMessages = [
   "İşte benim geleceğin başarılı sevgilisi! 🎓❤️",
   "Her doğru cevabınla içim eriyor aşkım, çok zekisin! 😍",
   "Harika gidiyorsun bitanem, başarılar seninle! 🌈",
-  "Gurur kaynağım benim, 5 doğru daha eklendi! 🥇💖"
+  "Gurur kaynağım benim, 5 doğru daha eklendi! 🥇💖",
+  "5 soru daha devrildi sevgilim, harika bir şov! 🎪🎭",
+  "Benim akıllı meleğim yine zirveye oynuyor! 😇❤️",
+  "Bu zekayla aşamayacağın hiçbir sınav yok sevgilim! 🌠",
+  "Yine 5 doğru! Seninle gurur duymaktan yorulmuyorum aşkım! 🥰",
+  "Harikalar yaratmaya devam ediyorsun güzel sevgilim! 🪄✨",
+  "Sınav kağıtları şimdiden senden korksun aşkım! 🔥😂",
+  "Benim sevgilim bir dahi, 5 soru daha doğru! 🧠💫",
+  "Aşkım sen tam bir soru canavarı çıktın! 👾❤️",
+  "5 soruluk bu mükemmel gidişatı ayakta alkışlıyorum! 👏💖",
+  "Her 5 doğru cevabında kalbimde kelebekler uçuşuyor bitanem! 🦋",
+  "Sen my en kıymetli, en akıllı sevgilimsin! 💎❤️",
+  "Büyük başarı sevgilim, 5 doğru daha cepte! 💼",
+  "Zekanı izlemek büyük bir keyif sevgilim! 🍿🥰",
+  "Doğru cevaplar yağmur gibi yağıyor aşkım! 🌧️🌈",
+  "Sevgilim bu sınavı şimdiden kazandı diyebiliriz! 👑🏆"
 ];
 
 const streakMessages = [
@@ -56,8 +86,58 @@ const streakMessages = [
   "Bu gidişle sınavı darmadağın edeceksin aşkım! 💥",
   "Serin alev aldı resmen sevgilim, devam! 🔥👑",
   "Sorular senin önünde eğiliyor resmen aşkım! 🙇‍♀️❤️",
-  "Her doğru cevapta sana olan hayranlığım artıyor! 💕"
+  "Her doğru cevapta sana olan hayranlığım artıyor! 💕",
+  "Bu seri şaka mı sevgilim? Sen bir harikasın! 🎭💖",
+  "Alev alev yanan bir seri daha sevgilim! 🚒🔥",
+  "Seri devam ediyor sevgilim, durdurulamaz bir güç gibisin! ⚡",
+  "Zekanın parıltısı gözlerimi alıyor aşkım, harika bir seri! ✨🤩",
+  "Hız kesmeden doğru cevaplara devam bitanem! 🚄❤️",
+  "Bu harika seri için sana binlerce öpücük sevgilim! 💋🥰",
+  "Serin uzadıkça benim de göğsüm kabarıyor bitanem! 🦚",
+  "Sorulara resmen meydan okuyorsun aşkım, harika gidiyorsun!",
+  "Böyle giderse rekor kıracaksın benim bir tanecik sevgilim! 🏅",
+  "Hiç hata yapmadan seriyi korumak büyük başarı aşkım! 👏❤️",
+  "Seriye devam sevgilim, seninle her şey çok daha güzel! 🌹",
+  "İnanılmaz bir odaklanma gücü sevgilim, hayranım sana! 🎯",
+  "Doğrular zinciri oluştu resmen aşkım, mükemmelsin! 🔗💖",
+  "Serin hiç bozulmasın sevgilim, nazar boncuğun benden! 🧿",
+  "Üst üste doğrularla beni büyülemeye devam ediyorsun aşkım! 🪄"
 ];
+
+const superStreakMessages = [
+  "İNANILMAZ! Süper seri gidiyor aşkım! 👑🔥",
+  "Sen gerçek bir dahi misin sevgilim? Bu gidişat muazzam! 🧠💥",
+  "Aşkım resmen tarih yazıyorsun, durdurulamıyorsun! 📜🚀",
+  "Bu süper seri karşısında saygıyla eğiliyorum sevgilim! 🙇‍♂️💖",
+  "Harikalar ötesisin aşkım, rekor üstüne rekor! 🏆✨",
+  "Benim güzel sevgilim sınavı yok ediyor resmen! 💣❤️",
+  "Sen bir efsanesin bitanem, süper seri alev aldı! 🌪️🔥",
+  "Bu zekayla dünyaya meydan okuyabilirsin sevgilim! 🌍💪",
+  "Aşkım soruları resmen havada kapıyorsun! 🦅💖",
+  "Böyle bir seriyi daha önce kimse görmedi sevgilim! 🤩💫",
+  "Süper zeki sevgilim benim, gururum, her şeyim! 😘❤️",
+  "Bu gidişle sınavdan 100 almak kaçınılmaz aşkım! 💯🏆",
+  "Soruları adeta dans ettiriyorsun sevgilim! 💃🕺❤️",
+  "İçimdeki gurur dağları aştı aşkım, muazzam gidiyorsun! ⛰️💕",
+  "Her doğru cevabınla beni kendine aşık ediyorsun bitanem! 😍🌹",
+  "Aşkım sen bir soru çözme makinesisin resmen! 🤖🔥",
+  "Bu mükemmel seri için seni kocaman öpüyorum sevgilim! 💋",
+  "Süper seri alev alev sevgilim, kimse seni durduramaz! 🚒🚀",
+  "Zekanla beni her gün şaşırtıyorsun benim güzel meleğim! 👼✨",
+  "Soru çözme hızına yetişemiyorum aşkım, muhteşemsin! 🏎️💨",
+  "Resmen sınav pratiği değil, sınav şovu yapıyorsun sevgilim! 🎪",
+  "Sen benim en kıymetli şampiyonumsun sevgilim! 🥇💖",
+  "Zekanın önünde saygıyla eğiliyorum bitanem, devam! 🙇‍♀️💫",
+  "Süper seri hiç bozulmasın, başarıların daim olsun aşkım! 🧿",
+  "Bu harika gidişat için sana olan sevgim sonsuz bitanem! ♾️❤️",
+  "Sen her şeyin en güzelini hak ediyorsun akıllı sevgilim! 🌟",
+  "Sınavı şimdiden fethettin benim cesur sevgilim! ⚔️👑",
+  "Zekana, mantığına ve odağına hayran olmamak elde değil! 💖",
+  "Her soruyu bir sanat eseri gibi çözüyorsun aşkım! 🎨🥰",
+  "Süper serinle günüme güneş gibi doğdun sevgilim! ☀️🌸"
+];
+
+const floatingEmojisList = ["❤️", "💖", "🎉", "🌟", "🔥", "✨", "🚀", "🥰", "😍", "🧠", "🎯", "👑", "🌸", "🎈", "💫"];
 
 function setCookie(name: string, value: any, days = 365) {
   const expires = new Date();
@@ -94,7 +174,7 @@ export default function App() {
   
   const [streak, setStreak] = useState(() => getCookie<number>('askim_streak', 0));
   const [totalCorrect, setTotalCorrect] = useState(() => getCookie<number>('askim_totalCorrect', 0));
-  const [hearts, setHearts] = useState<{id: number, left: string, animationDuration: string, fontSize: string}[]>([]);
+  const [floatingEmojis, setFloatingEmojis] = useState<{id: number, emoji: string, left: string, animationDuration: string, fontSize: string}[]>([]);
   const [avatarData, setAvatarData] = useState<{image: string | null, message: string}>({ image: null, message: '' });
 
   useEffect(() => {
@@ -121,6 +201,15 @@ export default function App() {
     setCookie('askim_totalCorrect', totalCorrect);
   }, [totalCorrect]);
 
+  useEffect(() => {
+    // Preload all WebP avatar images on mount to force browser caching
+    const imagesToPreload = ['regular', 'supportive', 'extra-supportive', 'super-streak'];
+    imagesToPreload.forEach(name => {
+      const img = new Image();
+      img.src = `/${name}.webp`;
+    });
+  }, []);
+
   const filteredQuestions = useMemo(() => {
     if (selectedTopic === "Tümü") return rawQuestions;
     if (selectedTopic === REVIEW_TOPIC) {
@@ -130,20 +219,21 @@ export default function App() {
   }, [selectedTopic, flaggedIds, wrongIds]);
 
   const handleSelectOption = (questionId: number, optionIndex: number) => {
-    if (checked[questionId]) return; 
+    if (checked[questionId]) return;
     setAnswers(prev => ({ ...prev, [questionId]: optionIndex }));
   };
 
-  const triggerFloatingHearts = () => {
-    const newHearts = Array.from({ length: 6 }).map((_, i) => ({
+  const triggerFloatingEmojis = () => {
+    const newEmojis = Array.from({ length: 8 }).map((_, i) => ({
       id: Date.now() + i,
+      emoji: floatingEmojisList[Math.floor(Math.random() * floatingEmojisList.length)],
       left: Math.random() * 80 + 10 + '%',
       animationDuration: (Math.random() * 1.5 + 1.5) + 's',
       fontSize: (Math.random() * 2 + 1.5) + 'rem'
     }));
-    setHearts(prev => [...prev, ...newHearts]);
+    setFloatingEmojis(prev => [...prev, ...newEmojis]);
     setTimeout(() => {
-      setHearts(prev => prev.filter(h => !newHearts.find(nh => nh.id === h.id)));
+      setFloatingEmojis(prev => prev.filter(h => !newEmojis.find(nh => nh.id === h.id)));
     }, 3000);
   };
 
@@ -154,8 +244,9 @@ export default function App() {
       setAvatarData({ image: null, message: '' });
     }, 7500);
   };
+
   const toggleFlag = (questionId: number) => {
-    setFlaggedIds(prev => 
+    setFlaggedIds(prev =>
       prev.includes(questionId) ? prev.filter(id => id !== questionId) : [...prev, questionId]
     );
   };
@@ -178,7 +269,7 @@ export default function App() {
       const newStreak = streak + 1;
       setTotalCorrect(newTotal);
       setStreak(newStreak);
-      triggerFloatingHearts();
+      triggerFloatingEmojis();
 
       if (wrongIds.includes(questionId)) {
         setWrongIds(prev => prev.filter(id => id !== questionId));
@@ -186,6 +277,8 @@ export default function App() {
 
       if (newTotal > 0 && newTotal % 5 === 0) {
         showAvatar('extra-supportive', complimentMessages[Math.floor(Math.random() * complimentMessages.length)]);
+      } else if (newStreak >= 5) {
+        showAvatar('super-streak', superStreakMessages[Math.floor(Math.random() * superStreakMessages.length)]);
       } else if (newStreak >= 3) {
         showAvatar('extra-supportive', streakMessages[Math.floor(Math.random() * streakMessages.length)]);
       } else {
@@ -194,7 +287,7 @@ export default function App() {
     } else {
       setStreak(0);
       showAvatar('supportive', wrongMessages[Math.floor(Math.random() * wrongMessages.length)]);
-      
+
       if (!wrongIds.includes(questionId)) {
         setWrongIds(prev => [...prev, questionId]);
       }
@@ -207,9 +300,11 @@ export default function App() {
       setChecked({});
       setStreak(0);
       setTotalCorrect(0);
+      setFloatingEmojis([]);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
   const handleClearReviewList = () => {
     if (window.confirm("Tekrar edilecekler listesindeki tüm soruları temizlemek istediğine emin misin aşkım?")) {
       setFlaggedIds([]);
@@ -441,13 +536,13 @@ export default function App() {
         )}
       </main>
 
-      {/* FLOATING HEARTS LAYER */}
+      {/* FLOATING EMOJIS LAYER */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes floatUp {
           0% { transform: translateY(0) scale(0.8); opacity: 1; }
           100% { transform: translateY(-80vh) scale(1.5); opacity: 0; }
         }
-        .floating-heart {
+        .floating-emoji {
           position: fixed;
           bottom: 10px;
           animation: floatUp 2.5s ease-out forwards;
@@ -464,9 +559,9 @@ export default function App() {
         }
       `}} />
 
-      {hearts.map(h => (
-        <div key={h.id} className="floating-heart" style={{ left: h.left, animationDuration: h.animationDuration, fontSize: h.fontSize }}>
-          ❤️
+      {floatingEmojis.map(fe => (
+        <div key={fe.id} className="floating-emoji" style={{ left: fe.left, animationDuration: fe.animationDuration, fontSize: fe.fontSize }}>
+          {fe.emoji}
         </div>
       ))}
 
@@ -480,7 +575,7 @@ export default function App() {
             </div>
           )}
           <img
-            src={`/${avatarData.image}.png`}
+            src={`/${avatarData.image}.webp`}
             alt="Avatar"
             className="w-40 md:w-56 h-auto drop-shadow-2xl"
             style={{ mixBlendMode: 'multiply' }}
